@@ -1,16 +1,20 @@
 import { createTheme } from '@mui/material/styles';
-import { teal, purple } from '@mui/material/colors';
+import { blueGrey, grey } from '@mui/material/colors';
 
 const theme = createTheme({
   palette: {
     mode: 'dark',
-    primary: {
-      main: teal[500],
+    primary: blueGrey,
+    divider: blueGrey[700],
+    background: {
+      default: blueGrey[900],
+      paper: blueGrey['A400'],
     },
-    secondary: {
-      main: purple[500],
-    },
-  },
+    text: {
+      primary: '#fff',
+      secondary: grey[500],
+    }
+  }
 });
 
 
