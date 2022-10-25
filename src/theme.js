@@ -13,6 +13,7 @@ const theme = createTheme({
     text: {
       primary: '#fff',
       secondary: grey[500],
+      alt: grey[900]
     }
   }
 });
