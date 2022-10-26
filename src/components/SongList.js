@@ -1,15 +1,22 @@
+import React from 'react'
+import { useQuery } from '@apollo/react-hooks';
 import { PlayCircleFilledWhite, Save } from '@mui/icons-material';
 import { Card, CardActions, CardContent, CardMedia, CircularProgress, IconButton, Typography } from '@mui/material';
-import React from 'react'
+import { GET_SONGS } from '../graphql/queries';
 
 export default function SongList() {
-  let loading = false;
+  const { data, loading, error } = useQuery(GET_SONGS);
 
-  const song = {
-    title: 'Hurricane',
-    artist: 'Luke Coombs',
-    thumbnail: 'https://i.scdn.co/image/ab67616d00001e02ccba76fad1c624c09e72bc78'
-  }
+
+  console.log(data, loading, error)
+  // const song = {
+  //   title: 'Hurricane',
+  //   artist: 'Luke Coombs',
+  //   thumbnail: 'https://i.scdn.co/image/ab67616d00001e02ccba76fad1c624c09e72bc78'
+  // }
+
+
+
 
   if (loading) {
     return (
@@ -19,9 +26,13 @@ export default function SongList() {
     )
   }
 
+  if (error) {
+    return <div>Error Fetching Songs</div>;
+  }
+
   return (
     <div>
-      {Array.from({ length: 10 }, () => song).map((song, i) => (
+      {data.songs.map((song, i) => (
         <Song key={i} song={song} />
       ))}
     </div>

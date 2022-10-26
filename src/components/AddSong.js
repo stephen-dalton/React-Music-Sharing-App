@@ -31,7 +31,7 @@ export default function AddSong() {
       </Dialog>
       <TextField sx={{ m: 2 }} placeholder='Add YouTube or Soundcloud URL' fullWidth margin='normal' type="url" InputProps={{
         startAdornment: (
-          <InputAdornment sx={{ m: 1 }}>
+          <InputAdornment sx={{ m: 1 }} position="start">
             <Link />
           </InputAdornment>
         )
