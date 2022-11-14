@@ -1,5 +1,9 @@
 import { useSubscription } from "@apollo/react-hooks";
-import { PlayCircleFilledWhite, Save } from "@mui/icons-material";
+import {
+  PauseCircleFilled,
+  PlayCircleFilledWhite,
+  Save,
+} from "@mui/icons-material";
 import {
   Card,
   CardActions,
@@ -9,8 +13,9 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GET_SONGS } from "../graphql/subscriptions";
+import { SongContext } from "../App";
 
 export default function SongList() {
   const { data, loading, error } = useSubscription(GET_SONGS);
@@ -46,7 +51,19 @@ export default function SongList() {
 }
 
 function Song({ song }) {
-  const { title, artist, thumbnail } = song;
+  const { state, dispatch } = useContext(SongContext);
+  const [currentSongPlaying, setCurrentSongPlaying] = useState(false);
+  const { id, title, artist, thumbnail } = song;
+
+  useEffect(() => {
+    const isSongPlaying = state.isPlaying && id === state.song.id;
+    setCurrentSongPlaying(isSongPlaying);
+  }, [id, state.song.id, state.isPlaying]);
+
+  const handleToggleClick = () => {
+    dispatch({ type: "SET_SONG", payload: { song } });
+    dispatch(state.isPlaying ? { type: "PAUSE_SONG" } : { type: "PLAY_SONG" });
+  };
   return (
     <Card sx={{ margin: 3 }}>
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -77,8 +94,16 @@ function Song({ song }) {
             </Typography>
           </CardContent>
           <CardActions>
-            <IconButton size="medium" sx={{ color: "text.alt" }}>
-              <PlayCircleFilledWhite />
+            <IconButton
+              size="medium"
+              sx={{ color: "text.alt" }}
+              onClick={handleToggleClick}
+            >
+              {currentSongPlaying ? (
+                <PauseCircleFilled />
+              ) : (
+                <PlayCircleFilledWhite />
+              )}
             </IconButton>
             <IconButton size="medium" sx={{ color: "text.white" }}>
               <Save />

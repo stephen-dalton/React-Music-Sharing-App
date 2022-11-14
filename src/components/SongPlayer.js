@@ -8,6 +8,7 @@ import {
   IconButton,
   Slider,
   CardMedia,
+  Box,
 } from "@mui/material";
 import QueuedSongList from "./QueuedSongList";
 import { SongContext } from "../App";
@@ -22,17 +23,27 @@ export default function SongPlayer() {
     <>
       <Card
         variant="outlined"
-        sx={{ display: "flex", justifyContent: "space-between" }}
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          maxHeight: 176,
+          overflow: "hidden",
+        }}
       >
-        <div
-          style={{
+        <Box
+          sx={{
             display: "flex",
             flexDirection: "column",
             padding: "0px 15px",
           }}
         >
           <CardContent sx={{ flex: "1 0 auto" }}>
-            <Typography variant="h5" component="h3">
+            <Typography
+              variant="h5"
+              component="h3"
+              noWrap={true}
+              sx={{ maxWidth: 130 }}
+            >
               {state.song.title}
             </Typography>
             <Typography
@@ -43,8 +54,8 @@ export default function SongPlayer() {
               {state.song.artist}
             </Typography>
           </CardContent>
-          <div
-            style={{
+          <Box
+            sx={{
               display: "flex",
               alignItems: "center",
               paddingLeft: theme.spacing(1),
@@ -71,7 +82,7 @@ export default function SongPlayer() {
             >
               00:01:30
             </Typography>
-          </div>
+          </Box>
           <Slider
             type="range"
             min={0}
@@ -79,11 +90,11 @@ export default function SongPlayer() {
             step={0.01}
             sx={{ color: "text.alt" }}
           />
-        </div>
+        </Box>
         <CardMedia
           component="img"
           image={state.song.thumbnail}
-          sx={{ width: 150 }}
+          sx={{ maxWidth: 150, overflow: "hidden" }}
         />
       </Card>
       <QueuedSongList />
