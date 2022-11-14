@@ -1,26 +1,17 @@
-import React from 'react'
-import { useQuery } from '@apollo/react-hooks';
+import { useSubscription } from '@apollo/react-hooks';
 import { PlayCircleFilledWhite, Save } from '@mui/icons-material';
 import { Card, CardActions, CardContent, CardMedia, CircularProgress, IconButton, Typography } from '@mui/material';
-import { GET_SONGS } from '../graphql/queries';
+import React from 'react';
+import { GET_SONGS } from '../graphql/subscriptions';
 
 export default function SongList() {
-  const { data, loading, error } = useQuery(GET_SONGS);
-
+  const { data, loading, error } = useSubscription(GET_SONGS);
 
   console.log(data, loading, error)
-  // const song = {
-  //   title: 'Hurricane',
-  //   artist: 'Luke Coombs',
-  //   thumbnail: 'https://i.scdn.co/image/ab67616d00001e02ccba76fad1c624c09e72bc78'
-  // }
-
-
-
 
   if (loading) {
     return (
-      <div sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', mt: 50 }}>
+      <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', mt: 50, lt: 50 }}>
         <CircularProgress />
       </div>
     )
@@ -32,8 +23,8 @@ export default function SongList() {
 
   return (
     <div>
-      {data.songs.map((song, i) => (
-        <Song key={i} song={song} />
+      {data.songs.map((song) => (
+        <Song key={song.id} song={song} />
       ))}
     </div>
   )
