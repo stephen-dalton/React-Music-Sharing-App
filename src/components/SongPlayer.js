@@ -12,8 +12,11 @@ import {
 } from "@mui/material";
 import QueuedSongList from "./QueuedSongList";
 import { SongContext } from "../App";
+import { useQuery } from "@apollo/react-hooks";
+import { GET_QUEUED_SONGS } from "../graphql/queries";
 
 export default function SongPlayer() {
+  const { data } = useQuery(GET_QUEUED_SONGS);
   const { state, dispatch } = useContext(SongContext);
   const theme = useTheme();
   const handleToggleClick = () => {
@@ -97,7 +100,7 @@ export default function SongPlayer() {
           sx={{ maxWidth: 150, overflow: "hidden" }}
         />
       </Card>
-      <QueuedSongList />
+      <QueuedSongList queue={data.queue} />
     </>
   );
 }

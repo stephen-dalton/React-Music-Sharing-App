@@ -1,4 +1,4 @@
-import { useSubscription } from "@apollo/react-hooks";
+import { useMutation, useSubscription } from "@apollo/react-hooks";
 import {
   PauseCircleFilled,
   PlayCircleFilledWhite,
@@ -16,6 +16,7 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import { GET_SONGS } from "../graphql/subscriptions";
 import { SongContext } from "../App";
+import { ADD_REMOVE_SONGS_FROM_QUEUE } from "../graphql/mutations";
 
 export default function SongList() {
   const { data, loading, error } = useSubscription(GET_SONGS);
@@ -52,6 +53,11 @@ export default function SongList() {
 
 function Song({ song }) {
   const { state, dispatch } = useContext(SongContext);
+  const [addOrRemoveFromQueue] = useMutation(ADD_REMOVE_SONGS_FROM_QUEUE, {
+    onCompleted: (data) => {
+      localStorage.setItem("queue", JSON.stringify(data.addOrRemoveFromQueue));
+    },
+  });
   const [currentSongPlaying, setCurrentSongPlaying] = useState(false);
   const { id, title, artist, thumbnail } = song;
 
@@ -64,6 +70,13 @@ function Song({ song }) {
     dispatch({ type: "SET_SONG", payload: { song } });
     dispatch(state.isPlaying ? { type: "PAUSE_SONG" } : { type: "PLAY_SONG" });
   };
+
+  const handleAddOrRemoveFromQueue = () => {
+    addOrRemoveFromQueue({
+      variables: { input: { ...song, __typename: "Song" } },
+    });
+  };
+
   return (
     <Card sx={{ margin: 3 }}>
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -105,7 +118,11 @@ function Song({ song }) {
                 <PlayCircleFilledWhite />
               )}
             </IconButton>
-            <IconButton size="medium" sx={{ color: "text.white" }}>
+            <IconButton
+              size="medium"
+              sx={{ color: "text.white" }}
+              onClick={handleAddOrRemoveFromQueue}
+            >
               <Save />
             </IconButton>
           </CardActions>
